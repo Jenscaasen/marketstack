@@ -8,6 +8,7 @@ using System.Net.Http;
 using Marketstack.Entities.Stocks;
 using System.Linq;
 using Throttling;
+using System.Threading.Tasks;
 
 namespace Marketstack.Services
 {
@@ -57,6 +58,12 @@ namespace Marketstack.Services
             string dateFromStr = fromDate.ToString("yyyy-MM-dd");
             string dateToStr = toDate.ToString("yyyy-MM-dd");
             return _httpClient.GetAsync<StockBar>($"http://api.marketstack.com/v1/eod?symbols={stockSymbol}&date_from={dateFromStr}&date_to={dateToStr}", _options.ApiToken, _throttled);
+        }
+
+        public Task<StockBar> GetLatestQuote(string stockSymbol)
+        {
+            return _httpClient.GetSingleAsync<StockBar>($"http://api.marketstack.com/v1/intraday/latest?symbols={stockSymbol}", _options.ApiToken, _throttled);
+
         }
     }
 }

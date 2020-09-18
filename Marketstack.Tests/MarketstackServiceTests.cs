@@ -48,5 +48,12 @@ namespace Marketstack.Tests
             Assert.NotEmpty(bars);
             Assert.True(bars.Count > 100);
         }
+        [Fact]
+        public async Task GetLatestQuote_ReturnsBars()
+        {
+            var appleSymbol = "AAPL";
+            var bar = await _marketstackService.GetLatestQuote(appleSymbol);
+            Assert.NotNull(bar);
+        }
     }
 }

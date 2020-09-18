@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -29,6 +30,16 @@ namespace Marketstack.Services
 
                 pageResponse = await throttled.Run(() => httpClient.GetNextPageResponse(builder, pageResponse));
             }
+        }
+
+        public static async Task<T> GetSingleAsync<T>(this HttpClient httpClient, string url, string apiToken, Throttled throttled)
+        {
+            var builder = new UriBuilder(url);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query["access_key"] = apiToken;
+            builder.Query = query.ToString();
+            var pageResponse = await throttled.Run(() => httpClient. GetNextPageResponse<T>(builder, null));
+            return pageResponse.Data.First();
         }
 
         private static async Task<PageResponse<T>> GetNextPageResponse<T>(this HttpClient httpClient, UriBuilder builder, PageResponse<T> lastPageResponse)

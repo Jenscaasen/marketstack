@@ -2,6 +2,7 @@
 using Marketstack.Entities.Stocks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Marketstack.Interfaces
 {
@@ -9,6 +10,7 @@ namespace Marketstack.Interfaces
     {
         IAsyncEnumerable<Exchange> GetExchanges();
         IAsyncEnumerable<Stock> GetExchangeStocks(string exchangeMic);
-        IAsyncEnumerable<StockBar> GetStockEodBars(string stockSymbol, DateTime fromDate, DateTime toDate);        
+        IAsyncEnumerable<StockBar> GetStockEodBars(string stockSymbol, DateTime fromDate, DateTime toDate);
+        Task<StockBar> GetLatestQuote(string stockSymbol);
     }
 }
