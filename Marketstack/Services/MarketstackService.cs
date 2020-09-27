@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Marketstack.Services
 {
-    public class MarketstackService : IMarketstackService
+    public class MarketstackService 
     {
         private readonly MarketstackOptions _options;        
         private readonly HttpClient _httpClient;
@@ -60,11 +60,15 @@ namespace Marketstack.Services
             return _httpClient.GetAsync<StockBar>($"http://api.marketstack.com/v1/eod?symbols={stockSymbol}&date_from={dateFromStr}&date_to={dateToStr}", _options.ApiToken, _throttled);
         }
 
-
-        public Task<StockBar> GetLatestQuote(string stockSymbol)
+        public List<StockBar> GetStockEodBarsSync(string stockSymbol, DateTime fromDate, DateTime toDate)
         {
-            return _httpClient.GetSingleAsync<StockBar>($"http://api.marketstack.com/v1/intraday/latest?symbols={stockSymbol}", _options.ApiToken, _throttled);
-
+            string dateFromStr = fromDate.ToString("yyyy-MM-dd");
+            string dateToStr = toDate.ToString("yyyy-MM-dd");
+            return _httpClient.GetResult<StockBar>($"http://api.marketstack.com/v1/eod?symbols={stockSymbol}&date_from={dateFromStr}&date_to={dateToStr}", _options.ApiToken);
+        }
+        public StockBar GetLatestQuote(string stockSymbol)
+        {
+            return _httpClient.GetSingle<StockBar>($"http://api.marketstack.com/v1/tickers/{stockSymbol}/intraday/latest", _options.ApiToken, _throttled);
         }
 
         public IAsyncEnumerable<StockBar> GetStockIntraDayBars(string stockSymbol, DateTime fromDate, DateTime toDate)
@@ -73,6 +77,11 @@ namespace Marketstack.Services
             string dateToStr = toDate.ToString("yyyy-MM-dd HH:mm:ss");
             return _httpClient.GetAsync<StockBar>($"http://api.marketstack.com/v1/intraday?symbols={stockSymbol}&date_from={dateFromStr}&date_to={dateToStr}", _options.ApiToken, _throttled);
         }
-
+        public List<StockBar> GetStockIntraDayBarsSync(string stockSymbol, DateTime fromDate, DateTime toDate)
+        {
+            string dateFromStr = fromDate.ToString("yyyy-MM-dd HH:mm:ss");
+            string dateToStr = toDate.ToString("yyyy-MM-dd HH:mm:ss");
+            return _httpClient.GetResult<StockBar>($"http://api.marketstack.com/v1/intraday?symbols={stockSymbol}&date_from={dateFromStr}&date_to={dateToStr}", _options.ApiToken);
+        }
     }
 }

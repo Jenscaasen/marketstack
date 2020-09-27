@@ -40,7 +40,7 @@ namespace Marketstack.Tests
         [Fact]
         public async Task GetStockEodBars_ReturnsBars()
         {
-            var appleSymbol = "AAPL";
+            var appleSymbol = "INTC";
             var fromDate = new DateTime(2000, 1, 1);
             var toDate = DateTime.Now;
             var bars = await _marketstackService.GetStockEodBars(appleSymbol, fromDate, toDate)

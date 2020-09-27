@@ -2,6 +2,7 @@ using Marketstack.Entities.Exchanges;
 using Marketstack.Entities.Stocks;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Marketstack.Interfaces
 {
